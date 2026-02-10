@@ -46,7 +46,7 @@ def to_str(pns: None | list[int], lang: str = "ru") -> str:
     if pns is None or len(pns) == 1:
         pns = pns and pns[0]
         return pronouns_name_getter.obj(pns, lang)
-    return pronouns_name_getter.obj('list', lang) + ' ' + ', '.join(to_str(pn, lang) for pn in pns)
+    return pronouns_name_getter.obj('list', lang) + ' ' + ', '.join(pronouns_name_getter.obj(pn, lang) for pn in pns)
 
 
 def from_str(s: str) -> None | list[int]:
