@@ -10,7 +10,7 @@ async def on_start(cm: utils.cm.CommandMessage) -> None:
         '"Как catpy и forkpy, только по-другому"\n' +
         "Список команд _уже не поддерживается_. Пинг до бота: `/ping`\n" +
         "\n" +
-        "[Исходный код](https://github.com/yuki0iq/alterpy) доступен под лицензией MIT."
+        "[Исходный код](https://github.com/sylfn/alterpy) доступен под лицензией MIT."
     )
 
 handler_list = [utils.ch.CommandHandler(
