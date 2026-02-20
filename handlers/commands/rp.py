@@ -17,19 +17,17 @@ import utils.user
 log = utils.log.get("rp")
 
 
-def inflect_mention(mention: str, form: str, lt) -> str:
-    if not mention:
-        return mention
+def inflect_mention(user: utils.user.User, mention: str, form: str, lt) -> str:
     le, ri = 1, mention.rindex(']')
-    inflected = lt.inflect(lt.tr(mention[le:ri]), form)
+    inflected = lt.inflect(lt.tr(mention[le:ri]), form, utils.pronouns.to_int(user.get_pronouns()))
     assert isinstance(inflected, str)
     return mention[:le] + inflected + mention[ri:]
 
 
-def inflect_mentions(mentions: list[str], form: str, lt) -> str:
+def inflect_mentions(mentions: list[tuple[utils.user.User, str]], form: str, lt) -> str:
     if not mentions:
         return ""
-    anded = lt.ander(inflect_mention(mention, form, lt) for mention in mentions)
+    anded = lt.ander(inflect_mention(mention[0], mention[1], form, lt) for mention in mentions)
     assert isinstance(anded, str)
     return anded
 
@@ -49,12 +47,12 @@ class RP2Handler:
     def __post_init__(self):
         self.lang = utils.locale.lang(self.lang)
 
-    def invoke(self, user: str, pronouns: None | int | list[int], mention: list[tuple[utils.user.User, str]], comment: str) -> str:
+    def invoke(self, user: str, pronouns: None | int | list[int], mentions: list[tuple[utils.user.User, str]], comment: str) -> str:
         return "{e} | {s} {v} {m} {c}".format(
             e=self.emoji,
             s=user,
             v=to_role(utils.regex.split_by_word_border(self.verb()), utils.pronouns.to_int(pronouns)),
-            m=inflect_mentions(list(m[1] for m in mention), self.form, self.lang),
+            m=inflect_mentions(mentions, self.form, self.lang),
             c=comment,
         ).strip().replace('  ', ' ', 1)
 

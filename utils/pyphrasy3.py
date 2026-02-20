@@ -36,7 +36,7 @@ class PhraseInflector(object):
         else:
             return None
 
-    def select_master(self, phrase: list[str]) -> typing.Optional[ScoreHelper]:
+    def select_master(self, phrase: list[str], g = None) -> typing.Optional[ScoreHelper]:
         versions = []
         for i, word in enumerate(phrase):
             forms = defaultdict(list)
@@ -56,19 +56,21 @@ class PhraseInflector(object):
             versions.extend(forms_pass)
 
         if versions:
-            return sorted(versions, key=attrgetter('score'), reverse=True)[0]
+            master = sorted(versions, key=attrgetter('score'), reverse=True)[0]
+            master.parsed = self.morph.patch_gender(master.parsed, g)
+            return master
         else:
             return None
 
-    def inflect(self, phrase: str, form: typing.Union[str, set[str], frozenset[str]]) -> str:
-        master_word = self.select_master(utils.regex.split_by_word_border(phrase))
+    def inflect(self, phrase: str, form: typing.Union[str, set[str], frozenset[str]], g = None) -> str:
+        master_word = self.select_master(utils.regex.split_by_word_border(phrase), g)
         if master_word:
-            return self._inflect_with_master(form, phrase, master_word.parsed)
+            return self._inflect_with_master(form, phrase, master_word.parsed, g)
         else:
             # logger.error('Can not find master word in: {0}'.format(phrase))
             return self._inflect_without_master(form, phrase)
 
-    def _inflect_with_master(self, form: typing.Union[str, set[str], frozenset[str]], phrase: str, master_word: pymorphy3.analyzer.Parse) -> str:
+    def _inflect_with_master(self, form: typing.Union[str, set[str], frozenset[str]], phrase: str, master_word: pymorphy3.analyzer.Parse, g) -> str:
         result = []
         if isinstance(form, str):
             form = {form}
@@ -79,7 +81,7 @@ class PhraseInflector(object):
             form = form - {'sing', 'plur'}
 
         infl = form
-        inflected_master = self.inf(master_word, infl)  # master_word.inflect(infl)
+        inflected_master = self.inf(master_word, infl, g)  # master_word.inflect(infl)
         if not inflected_master:
             logger.error('Can not inflect master word {1} with {2}: {0}'.format(phrase, master_word.word, str(infl)))
 
