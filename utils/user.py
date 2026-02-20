@@ -98,6 +98,7 @@ class User:
         (pronouns,) = cur.execute("SELECT pronoun_set FROM users WHERE id = ?", (self.sender.id,)).fetchone()
         if pronouns is None:
             return None
+        if pronouns == '-1': return [-1]
         assert pronouns.isdigit()
         return list(map(int, pronouns))
 

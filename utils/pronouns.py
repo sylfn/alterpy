@@ -51,7 +51,7 @@ def to_str(pns: None | list[int], lang: str = "ru") -> str:
 
 def from_str(s: str) -> None | list[int]:
     if re.search(any_pronouns_regex, s):
-        return -1
+        return [-1]
     ans = []
     for pn, pat in pronouns_regex.items():
         if re.search(pat, s):
