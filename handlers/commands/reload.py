@@ -29,7 +29,7 @@ async def on_hard_reload(cm: utils.cm.CommandMessage) -> None:
     PyGitUp.gitup.GitUp().run()
     await cm.int_cur.reply('→ Restarting...')
     argv = utils.system.argv()
-    os.execve(sys.executable, argv, {'alterpy_prev': f'{cm.sender.chat_id} {cm.id}'})
+    os.execve(sys.executable, argv, {'alterpy_prev': f'{cm.sender.chat.id} {cm.id}'})
 
 
 handler_list = [
