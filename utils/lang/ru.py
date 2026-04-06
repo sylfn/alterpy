@@ -2,7 +2,6 @@ import pymorphy3
 import utils.pyphrasy3
 import utils.str
 import utils.log
-import utils.transliterator
 import os.path
 import typing
 
@@ -131,11 +130,8 @@ def agree_with_number(s: str, num: int, form: typing.Union[str, set[str], frozen
     return ret
 
 
-translit = utils.transliterator.Transliterator()
-
-
 def tr(s: str) -> str:
-    return translit.inverse_transliterate(s)
+    return s
 
 
 def ander(arr: list[str]) -> str:
