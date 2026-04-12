@@ -18,7 +18,7 @@ class MessageInteractor(typing.NamedTuple):
                 await self.message.reply(f"Exception: {e}")
             except:
                 pass
-            log.exception("Could not reply")
+            log.error(f"Could not reply to t.me/{self.message.chat.id}/{self.message.id}: {repr(e)}")
         return None
 
     async def respond(self, text: str, file: typing.Any = None, link_preview: bool = True) -> "typing.Optional[MessageInteractor]":
@@ -30,7 +30,7 @@ class MessageInteractor(typing.NamedTuple):
                 await self.message.reply(f"Exception: {e}")
             except:
                 pass
-            log.exception("Could not respond")
+            log.error(f"Could not respond to t.me/{self.message.chat.id}/{self.message.id}: {repr(e)}")
         return None
 
     async def send_file(self, file: typing.Any, as_reply: bool = False, **kwargs: typing.Any) -> "typing.Optional[MessageInteractor]":
@@ -47,7 +47,7 @@ class MessageInteractor(typing.NamedTuple):
                 await self.message.reply(f"Exception: {e}")
             except:
                 pass
-            log.exception("Could not send file")
+            log.error(f"Could not send file to t.me/{self.message.chat.id}/{self.message.id}: {repr(e)}")
         return None
 
     async def delete(self) -> None:
