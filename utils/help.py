@@ -7,17 +7,18 @@ import typing
 import re
 
 
-def entry(name: str = '') -> str:
+def entry(name: str) -> str:
     return (f'https://sylfn.github.io/alterpy/help#{name}').replace('\\', '\\\\').replace(')', '\\)')
 
 
-def link(name: str = '') -> str:
+def link(name: str) -> str:
+    if name and name not in "start ping keyboard random me tts kek calend elevated repeat role wttrin pronouns redirect lang help".split():
+        return f'(раздел {name} ещё не написан)'
     return f'[{utils.str.escape(name or "Справка")}]({entry(name)})'
 
 
 def forward_handler() -> typing.Callable[[utils.cm.CommandMessage], typing.Awaitable[None]]:
     async def on_help(cm: utils.cm.CommandMessage) -> None:
-        # TODO add check exists.
         await cm.int_cur.reply(link(cm.arg))
     return on_help
 
