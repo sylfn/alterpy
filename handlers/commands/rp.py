@@ -37,9 +37,9 @@ def to_role(words: list[str], p: int) -> str:
 
 @dataclasses.dataclass
 class RP2Handler:
-    pattern: re.Pattern[str]
-    verb: typing.Callable[[], str]
     emoji: str
+    pattern: re.Pattern[str]
+    verb: str | typing.Callable[[], str] = ''
     lang: str = "ru"
     form: str = "accs"
 
@@ -47,37 +47,39 @@ class RP2Handler:
         self.lang = utils.locale.lang(self.lang)
 
     def invoke(self, user: str, pronouns: None | int | list[int], mentions: list[tuple[utils.user.User, str]], comment: str) -> str:
+        verb = (self.verb or self.pattern) if type(self.verb) == str else self.verb()
+        verb = utils.regex.split_by_word_border(verb)
         return "{e} | {s} {v} {m} {c}".format(
             e=self.emoji,
             s=user,
-            v=to_role(utils.regex.split_by_word_border(self.verb()), utils.pronouns.to_int(pronouns)),
+            v=to_role(verb, utils.pronouns.to_int(pronouns)),
             m=inflect_mentions(mentions, self.form, self.lang),
             c=comment,
         ).strip().replace('  ', ' ', 1)
 
 
 rp2handlers = [
-    RP2Handler(utils.regex.cmd("обнять"), utils.common.wrap("обнять"), "🤗"),
-    RP2Handler(utils.regex.cmd("выебать"), utils.common.wrap("выебать"), "😈"),
-    RP2Handler(utils.regex.cmd("дать"), utils.common.wrap("дать"), "🎁", form="datv"),
-    RP2Handler(utils.regex.cmd("сломать"), utils.common.wrap("сломать"), "🔧"),
-    RP2Handler(utils.regex.cmd("убить"), utils.common.wrap("убить"), "☠"),
-    RP2Handler(utils.regex.cmd("расстрелять"), utils.common.wrap("расстрелять"), "🔫"),
-    RP2Handler(utils.regex.cmd("поцеловать"), utils.common.wrap("поцеловать"), "😘"),
-    RP2Handler(utils.regex.cmd("кусь(нуть){0,1}|укусить"), utils.common.wrap("кусьнуть"), "😬"),
-    RP2Handler(utils.regex.cmd("пнуть"), utils.common.wrap("пнуть"), "👞"),
-    RP2Handler(utils.regex.cmd("прижать"), utils.common.wrap("прижать"), "🤲"),
-    RP2Handler(utils.regex.cmd("погладить"), utils.common.wrap("погладить"), "🤲"),
-    RP2Handler(utils.regex.cmd("потрогать"), utils.common.wrap("потрогать"), "🙌"),
-    RP2Handler(utils.regex.cmd("лизнуть"), utils.common.wrap("лизнуть"), "👅"),
-    RP2Handler(utils.regex.cmd("понюхать"), utils.common.wrap("понюхать"), "👃"),
-    RP2Handler(utils.regex.cmd("ударить"), utils.common.wrap("ударить"), "🤜😵"),
-    RP2Handler(utils.regex.cmd("шлепнуть"), utils.common.wrap("шлепнуть"), "👏"),
-    RP2Handler(utils.regex.cmd("шлёпнуть"), utils.common.wrap("шлёпнуть"), "👏"),
-    RP2Handler(utils.regex.cmd("предложить пива"), utils.common.wrap("предложить пива"), "🍻", form="datv"),
-    RP2Handler(utils.regex.cmd("дефенестрировать"), utils.rand.rand_or_null_fun("отправить в свободное падение", 1, 2, "измучить виндой"), "🪟"),
+    RP2Handler("🤗", "обнять"),
+    RP2Handler("😈", "выебать"),
+    RP2Handler("🔧", "сломать"),
+    RP2Handler("☠", "убить"),
+    RP2Handler("🔫", "расстрелять"),
+    RP2Handler("😘", "поцеловать"),
+    RP2Handler("👞", "пнуть"),
+    RP2Handler("🤲", "прижать"),
+    RP2Handler("🤲", "погладить"),
+    RP2Handler("🙌", "потрогать"),
+    RP2Handler("👅", "лизнуть"),
+    RP2Handler("👃", "понюхать"),
+    RP2Handler("🤜😵", "ударить"),
+    RP2Handler("👏", "шлепнуть"),
+    RP2Handler("👏", "шлёпнуть"),
+    RP2Handler("😬", "кусь(нуть){0,1}|укусить", verb="кусьнуть"),
+    RP2Handler("🎁", "дать", form="datv"),
+    RP2Handler("🍻", "предложить пива", form="datv"),
+    RP2Handler("🪟", "дефенестрировать", utils.rand.rand_or_null_fun("отправить в свободное падение", 1, 2, "измучить виндой")),
 ]
-rp2handlers_regex = re.compile(utils.regex.union(h.pattern for h in rp2handlers))
+rp2handlers_regex = re.compile(utils.regex.cmd(utils.regex.union(h.pattern for h in rp2handlers)))
 
 
 async def on_rp(cm: utils.cm.CommandMessage) -> None:
