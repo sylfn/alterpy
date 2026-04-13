@@ -12,7 +12,7 @@ def entry(name: str) -> str:
 
 
 def link(name: str) -> str:
-    if name and name not in "start ping keyboard random me tts kek calend elevated repeat rp2 rp3 pronouns redirect lang help".split():
+    if name and name not in "start ping keyboard random me tts kek elevated repeat rp2 rp3 pronouns redirect lang help".split():
         return f'(раздел {name} ещё не написан)'
     return f'[{utils.str.escape(name or "Справка")}]({entry(name)})'
 
