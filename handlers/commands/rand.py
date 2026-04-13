@@ -59,13 +59,6 @@ async def on_choose(cm: utils.cm.CommandMessage) -> None:
     await cm.int_cur.reply(f"{pref} {val}")
 
 
-async def on_poll(cm: utils.cm.CommandMessage) -> None:
-    pref = random.choice(LOC.obj('prefs', cm.lang))
-    choices = list(x.text for x in cm.media.poll().poll.answers)
-    val = random.choice(choices).text
-    await cm.int_cur.reply(f"{pref} {utils.str.escape(val)}")
-
-
 handler_list.append(utils.ch.CommandHandler(
     name='prob',
     pattern=utils.regex.cmd(utils.regex.unite('prob', 'chance', 'инфа', 'шанс', 'вер', 'вероятность')),
@@ -79,13 +72,4 @@ handler_list.append(utils.ch.CommandHandler(
     help_page="random",
     handler_impl=on_choose,
     is_prefix=True
-))
-
-handler_list.append(utils.ch.CommandHandler(
-    name='poll-choose',
-    pattern=utils.regex.ignore_case(""),
-    help_page="random",
-    handler_impl=on_poll,
-    required_media_type={"poll"},
-    is_arg_current=True
 ))
