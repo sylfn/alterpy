@@ -38,7 +38,6 @@ translations = {
 Running on `{system_info}`
 Ping is _{ping}_, handled in _{handle}_
 Up for _{up}_
-Compute speed is _{speed}M_ operations per second
 This chat ID is `{cm.sender.chat.id}`
 {user_count} known users from {chat_count} known chats
 
@@ -50,7 +49,6 @@ This chat ID is `{cm.sender.chat.id}`
 Запущена на `{system_info}`
 Пинг — _{ping}_, обработка — _{handle}_
 Не падает, работает _{up}_
-Скорость вычислений — _{speed}M_ операций в секунду
 ID чата — `{cm.sender.chat.id}`
 {user_count} пользователей из {chat_count} чатов
 
@@ -94,7 +92,6 @@ async def on_test(cm: utils.cm.CommandMessage) -> None:
 async def on_stat(cm: utils.cm.CommandMessage) -> None:
     cur_time = datetime.datetime.now(datetime.timezone.utc)
     ping, handle, up = get_ping_times(cm)
-    speed = utils.system.perf_test_compute()
     system_info = utils.system.system_info()
     user_count = utils.user.user_count()
     chat_count = utils.user.chat_count()
