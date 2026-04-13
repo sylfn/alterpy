@@ -5,12 +5,9 @@ import utils.regex
 
 async def on_start(cm: utils.cm.CommandMessage) -> None:
     await cm.int_cur.reply(
-        "Привет! На связи alterpy - полузаброшенный, но всё так же быстрый, потому что никому не нужный телеграм-бот, разработанный для t.me/theyukichat!\n" +
+        "Привет! На связи alterpy - полузаброшенный, но всё так же быстрый, потому что никому не нужный телеграм-бот!\n" +
         "\n" +
-        '"Как catpy и forkpy, только по-другому"\n' +
-        "Список команд _уже не поддерживается_. Пинг до бота: `/ping`\n" +
-        "\n" +
-        "[Исходный код](https://github.com/sylfn/alterpy) доступен под лицензией MIT."
+        "[Список команд](https://sylfn.github.io/alterpy/help). [Исходный код](https://github.com/sylfn/alterpy). Пинг до бота: `/ping`\n"
     )
 
 handler_list = [utils.ch.CommandHandler(
