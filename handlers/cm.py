@@ -16,6 +16,8 @@ import utils.th
 the_bot_id = alterpy.context.the_bot_id
 ch_list: list[utils.ch.CommandHandler] = []
 
+utils.help.add(ch_list, ['man', 'ман'], ['help', 'command', 'справка', 'команда'])
+
 initial_handlers = ch_list[:]
 handlers_dir = "handlers/commands"
 
