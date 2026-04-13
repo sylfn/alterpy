@@ -77,6 +77,7 @@ rp2handlers = [
     RP2Handler(utils.regex.cmd("предложить пива"), utils.common.wrap("предложить пива"), "🍻", form="datv"),
     RP2Handler(utils.regex.cmd("дефенестрировать"), utils.rand.rand_or_null_fun("отправить в свободное падение", 1, 2, "измучить виндой"), "🪟"),
 ]
+rp2handlers_regex = re.compile(utils.regex.union(h.pattern for h in rp2handlers))
 
 
 async def on_rp(cm: utils.cm.CommandMessage) -> None:
@@ -166,7 +167,7 @@ async def on_role(cm: utils.cm.CommandMessage) -> None:
 
 
 handler_list = [
-    utils.ch.CommandHandler("role", re.compile(""), "rp2", on_rp),
+    utils.ch.CommandHandler("role", rp2handlers_regex, "rp2", on_rp),
     utils.ch.CommandHandler("role-new", utils.regex.ignore_case("(^|\n)~.*(?<!~)($|\n)"), "rp3", on_role),
 ]
 
