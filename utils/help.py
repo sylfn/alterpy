@@ -7,25 +7,24 @@ import typing
 import re
 
 
-def entry(lang: str, name: str = '') -> str:
-    return (f'https://sylfn.github.io/alterpy/{lang}#{name}').replace('\\', '\\\\').replace(')', '\\)')
+def entry(name: str = '') -> str:
+    return (f'https://sylfn.github.io/alterpy/help#{name}').replace('\\', '\\\\').replace(')', '\\)')
 
 
-def link(lang: str, name: str = '') -> str:
-    ent = entry(lang, name)
-    return f'[{utils.str.escape(name or "Help")}]({ent})'
+def link(name: str = '') -> str:
+    return f'[{utils.str.escape(name or "Справка")}]({entry(name)})'
 
 
 def forward_handler() -> typing.Callable[[utils.cm.CommandMessage], typing.Awaitable[None]]:
     async def on_help(cm: utils.cm.CommandMessage) -> None:
         # TODO add check exists.
-        await cm.int_cur.reply(link(cm.lang, cm.arg))
+        await cm.int_cur.reply(link(cm.arg))
     return on_help
 
 
-def on_reverse_help_impl(handlers: list[typing.Any], arg: str, help_cmds: list[str], lang: str) -> str:
+def on_reverse_help_impl(handlers: list[typing.Any], arg: str, help_cmds: list[str]) -> str:
     if not arg:
-        return f"Type `{help_cmds} [command]` to view help page for command"
+        return f"Набери `{help_cmds} [команда]`, чтобы увидеть справку по конкретной команде, например `{help_cmds} +мест`"
 
     help_pages_list = [
         handler.help_page
@@ -37,16 +36,16 @@ def on_reverse_help_impl(handlers: list[typing.Any], arg: str, help_cmds: list[s
     ]
 
     if not help_pages_list:
-        return f"Could not match `{arg}`"
+        return f"Нет справки по команде `{arg}`"
 
-    res = "Help entries:\n" + '\n'.join(map(lambda x: link(lang, x), help_pages_list))
+    res = "Найденные разделы:\n" + '\n'.join(map(lambda x: link(lang, x), help_pages_list))
     print(res)
     return res
 
 
 def reverse_handler(handlers: list[typing.Any], help_cmds: list[str]) -> typing.Callable[[utils.cm.CommandMessage], typing.Awaitable[None]]:
     async def on_help(cm: utils.cm.CommandMessage) -> None:
-        await cm.int_cur.reply(on_reverse_help_impl(handlers, cm.arg, help_cmds, cm.lang))
+        await cm.int_cur.reply(on_reverse_help_impl(handlers, cm.arg, help_cmds))
     return on_help
 
 
