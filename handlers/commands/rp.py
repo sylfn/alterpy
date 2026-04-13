@@ -166,7 +166,7 @@ async def on_role(cm: utils.cm.CommandMessage) -> None:
 
 
 handler_list = [
-    utils.ch.CommandHandler("role", re.compile(""), "role", on_rp),
-    utils.ch.CommandHandler("role-new", utils.regex.ignore_case("(^|\n)~.*(?<!~)($|\n)"), "role", on_role),
+    utils.ch.CommandHandler("role", re.compile(""), "rp2", on_rp),
+    utils.ch.CommandHandler("role-new", utils.regex.ignore_case("(^|\n)~.*(?<!~)($|\n)"), "rp3", on_role),
 ]
 
