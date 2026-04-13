@@ -1,7 +1,6 @@
 import dataclasses
 import re
 import typing
-import utils.aiospeller
 import utils.ch
 import utils.cm
 import utils.common
@@ -81,7 +80,6 @@ rp2handlers = [
 
 
 async def on_rp(cm: utils.cm.CommandMessage) -> None:
-    # cm = cm._replace(arg=await utils.aiospeller.correct(alterpy.context.session, cm.arg))
     user = await cm.sender.get_mention()
     pronoun_set = cm.sender.get_pronouns()
     default_mention = [(cm.reply_sender, await cm.reply_sender.get_mention())] if cm.reply_sender is not None else []
