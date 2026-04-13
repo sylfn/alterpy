@@ -19,7 +19,11 @@ class Localizator:
             return cur
         if not cur:
             return None
-        return cur[lang] if lang in cur else list(cur.values())[0]
+        if lang in cur:
+            return cur[lang]
+        if 'ru' in cur:
+            return cur['ru']
+        return list(cur.values())[0]
 
     def get(self, s: str, lang: str) -> str:
         return str(utils.str.FStr(self.obj(s, lang)))
@@ -46,7 +50,7 @@ def detect(s: str) -> str:
 
     if 'а' <= s[0].lower() <= 'я': return 'ru'
     if 'a' <= s[0].lower() <= 'z': return 'en'
-    return 'en' # unknown
+    return 'ru' # unknown
 
 
 def try_verb_past(w: str, p: int) -> str:
