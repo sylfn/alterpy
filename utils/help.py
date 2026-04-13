@@ -39,9 +39,7 @@ def on_reverse_help_impl(handlers: list[typing.Any], arg: str, help_cmds: list[s
     if not help_pages_list:
         return f"Нет справки по команде `{arg}`"
 
-    res = "Найденные разделы:\n" + '\n'.join(map(link, help_pages_list))
-    print(res)
-    return res
+    return "Найденные разделы: " + '; '.join(map(link, help_pages_list))
 
 
 def reverse_handler(handlers: list[typing.Any], help_cmds: list[str]) -> typing.Callable[[utils.cm.CommandMessage], typing.Awaitable[None]]:
