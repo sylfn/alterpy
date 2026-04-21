@@ -94,7 +94,7 @@ async def on_rp(cm: utils.cm.CommandMessage) -> None:
         # try match to RP-2 as "RP-2 [mention] arg"
         for handler in rp2handlers:
             try:
-                match = re.search(handler.pattern, line)
+                match = re.search(utils.regex.cmd(handler.pattern), line)
                 if match:
                     arg = line[len(match[0]):]
                     arg = arg.lstrip()
