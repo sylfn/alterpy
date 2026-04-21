@@ -79,7 +79,7 @@ rp2handlers = [
     RP2Handler("🍻", "предложить пива", form="datv"),
     RP2Handler("🪟", "дефенестрировать", utils.rand.rand_or_null_fun("отправить в свободное падение", 1, 2, "измучить виндой")),
 ]
-rp2handlers_regex = re.compile(utils.regex.cmd(utils.regex.union(h.pattern for h in rp2handlers)))
+rp2handlers_regex = utils.regex.cmd(utils.regex.union(h.pattern for h in rp2handlers))
 
 
 async def on_rp(cm: utils.cm.CommandMessage) -> None:
