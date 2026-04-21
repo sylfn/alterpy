@@ -42,9 +42,11 @@ class RP2Handler:
     verb: str | typing.Callable[[], str] = ''
     lang: str = "ru"
     form: str = "accs"
+    compiled_pattern = None
 
     def __post_init__(self):
         self.lang = utils.locale.lang(self.lang)
+        self.compiled_pattern = utils.regex.cmd(self.pattern)
 
     def invoke(self, user: str, pronouns: None | int | list[int], mentions: list[tuple[utils.user.User, str]], comment: str) -> str:
         verb = (self.verb or self.pattern) if type(self.verb) == str else self.verb()
@@ -94,7 +96,7 @@ async def on_rp(cm: utils.cm.CommandMessage) -> None:
         # try match to RP-2 as "RP-2 [mention] arg"
         for handler in rp2handlers:
             try:
-                match = re.search(utils.regex.cmd(handler.pattern), line)
+                match = re.search(handler.compiled_pattern, line)
                 if match:
                     arg = line[len(match[0]):]
                     arg = arg.lstrip()
