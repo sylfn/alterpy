@@ -11,5 +11,4 @@ requests
 aiohttp
 aiodns
 Brotli
-lemminflect
 git-up
