@@ -15,9 +15,6 @@ class Media(typing.NamedTuple):
             return file
         return None
 
-    def poll(self) -> telethon.tl.types.MessageMediaPoll:
-        return self.message.poll
-
     def type(self) -> str:
         if not (self.message and self.message.media): return ""
         if self.message.poll: return "poll"
