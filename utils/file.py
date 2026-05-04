@@ -1,7 +1,6 @@
 import utils.rand
 
 import os
-import typing
 import pathlib
 
 
@@ -19,17 +18,3 @@ def list_filenames(path: str) -> list[str]:
 
 def temp_filename() -> str:
     return f"/tmp/alterpy-{utils.rand.printable()}"
-
-
-def is_file(path: str) -> bool:
-    """return True if 'path' is a path to existing file (not folder)"""
-    return pathlib.Path(path).is_file()
-
-
-def create_dir(path: str) -> bool:
-    try:
-        os.mkdir(path)
-    except FileExistsError:
-        return False
-    return True
-
