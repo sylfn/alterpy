@@ -1,7 +1,6 @@
 Telethon_v1.24
 cryptg
 pytomlpp
-Pillow
 pymorphy3
 pymorphy3-dicts-ru
 gTTS

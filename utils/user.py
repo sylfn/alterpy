@@ -2,7 +2,6 @@ import alterpy.context
 import dataclasses
 import datetime
 import io
-import PIL.Image
 import re
 import sqlite3
 import telethon.tl.types
@@ -84,15 +83,6 @@ class User:
         if username:
             return f"[{utils.str.escape(name)}](t.me/{username})"
         return f"[{utils.str.escape(name)}](tg://user?id={uid})"
-
-    async def userpic(self) -> PIL.Image.Image | None:
-        by = io.BytesIO()
-        await self.client.download_profile_photo(self.sender, file=by)
-        by.seek(0)
-        try:
-            return PIL.Image.open(by)
-        except:
-            return None
 
     def get_pronouns(self) -> list[int]:
         (pronouns,) = cur.execute("SELECT pronoun_set FROM users WHERE id = ?", (self.sender.id,)).fetchone()
