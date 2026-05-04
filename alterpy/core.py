@@ -29,38 +29,33 @@ async def main(log: logging.Logger) -> None:
     except:
         _chat, _reply = log_id, None
 
-    telethon_config = utils.config.load("telethon")
-    try:
-        async with aiohttp.ClientSession() as context.session:
-            client = telethon.TelegramClient("alterpy", telethon_config['api_id'], telethon_config['api_hash'])
-            await client.start(bot_token=telethon_config['bot_token'])
-            async with client:
-                log.info("Started telethon instance")
-                if log_id:
-                    try:
-                        await client.send_message(_chat, "← alterpy is starting...", reply_to=_reply)
-                    except:
-                        log.warning("Could not reply back 'is starting'")
-
-                context.the_bot_id = int(telethon_config['bot_token'].split(':')[0])
-                del telethon_config
-
-                utils.help.add(utils.command.handlers, ['man', 'ман'], ['help', 'command', 'справка', 'команда'])
-                utils.command.initial = utils.command.handlers[:]
-
-                res = await utils.mod.load_handlers(utils.command.initial, utils.command.handlers, utils.command.location, True)
+    async with aiohttp.ClientSession() as context.session:
+        telethon_config = utils.config.load("telethon")
+        client = telethon.TelegramClient("alterpy", telethon_config['api_id'], telethon_config['api_hash'])
+        await client.start(bot_token=telethon_config['bot_token'])
+        async with client:
+            log.info("Started telethon instance")
+            if log_id:
                 try:
-                    await client.send_message(_chat, f"← alterpy start: {res}. Check logs for further info", reply_to=_reply)
+                    await client.send_message(_chat, "← alterpy is starting...", reply_to=_reply)
                 except:
-                    log.warning("Could not reply back 'started'")
+                    log.warning("Could not reply back 'is starting'")
 
-                client.add_event_handler(utils.command.event_handler, telethon.events.newmessage.NewMessage)
+            context.the_bot_id = int(telethon_config['bot_token'].split(':')[0])
+            del telethon_config
 
-                log.info("Started!")
-                await client.run_until_disconnected()
-    except sqlite3.OperationalError:
-        log.error("Another instance of this bot is already running!")
-    except SystemExit:
-        raise
+            utils.help.add(utils.command.handlers, ['man', 'ман'], ['help', 'command', 'справка', 'команда'])
+            utils.command.initial = utils.command.handlers[:]
+
+            res = await utils.mod.load_handlers(utils.command.initial, utils.command.handlers, utils.command.location, True)
+            try:
+                await client.send_message(_chat, f"← alterpy start: {res}. Check logs for further info", reply_to=_reply)
+            except:
+                log.warning("Could not reply back 'started'")
+
+            client.add_event_handler(utils.command.event_handler, telethon.events.newmessage.NewMessage)
+
+            log.info("Started!")
+            await client.run_until_disconnected()
 
 
