@@ -18,10 +18,6 @@ def weighted(pairs: list[tuple[int, typing.Any]]) -> typing.Any:
             return value
 
 
-def weighted_fun(pairs: list[tuple[int, typing.Any]]) -> typing.Callable[[], typing.Any]:
-    return lambda: weighted(pairs)
-
-
 def printable(n: int = 10, chars: str = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890") -> str:
     return ''.join(random.choice(chars) for _ in range(n))
 
