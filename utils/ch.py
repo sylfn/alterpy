@@ -1,7 +1,6 @@
 import utils.cm
 import utils.log
 import utils.regex
-import utils.media
 
 import typing
 import re
@@ -32,7 +31,5 @@ def apply(cm: utils.cm.CommandMessage, ch: CommandHandler) -> utils.cm.CommandMe
     arg = re.sub(ch.pattern, '', cm.arg)
     if not len(arg) and not ch.is_arg_current:
         arg = cm.rep
-    if not cm.msg.media and not ch.is_arg_current:
-        cm = cm._replace(media=cm.reply_media)
     return cm._replace(arg=arg)
 
