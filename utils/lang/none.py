@@ -12,7 +12,3 @@ def inflect(s: str, _form: str, _pn: int | None = None) -> str:
 def agree_with_number(s: str, _num: int, _: typing.Any) -> str:
     return s
 
-
-def tr(s: str) -> str:
-    return s
-

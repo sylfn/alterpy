@@ -130,10 +130,6 @@ def agree_with_number(s: str, num: int, form: typing.Union[str, set[str], frozen
     return ret
 
 
-def tr(s: str) -> str:
-    return s
-
-
 def ander(arr: list[str]) -> str:
     return (', '.join(arr))[::-1].replace(' ,', ' и ', 1)[::-1]
 

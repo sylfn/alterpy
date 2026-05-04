@@ -4,7 +4,6 @@ pytomlpp
 pymorphy3
 pymorphy3-dicts-ru
 gTTS
-iuliia
 DAWG-Python
 sortedcollections
 rich

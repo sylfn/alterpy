@@ -18,7 +18,7 @@ log = utils.log.get("rp")
 
 def inflect_mention(user: utils.user.User, mention: str, form: str, lt) -> str:
     le, ri = 1, mention.rindex(']')
-    inflected = lt.inflect(lt.tr(mention[le:ri]), form, utils.pronouns.to_int(user.get_pronouns()))
+    inflected = lt.inflect(mention[le:ri], form, utils.pronouns.to_int(user.get_pronouns()))
     assert isinstance(inflected, str)
     return mention[:le] + inflected + mention[ri:]
 

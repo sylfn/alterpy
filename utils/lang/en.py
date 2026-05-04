@@ -1,4 +1,3 @@
-import iuliia
 import lemminflect
 import typing
 
@@ -17,10 +16,4 @@ def agree_with_number(s: str, num: int, _: typing.Any) -> str:
     if type(num) != int or abs(num) > 1:
         return s + "s"
     return s
-
-
-def tr(s: str) -> str:
-    ret = iuliia.translate(s, iuliia.WIKIPEDIA)
-    assert isinstance(ret, str)
-    return ret
 
