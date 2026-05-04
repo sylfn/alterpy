@@ -1,10 +1,7 @@
-import pytomlpp
+import json
 import os
 
 def load(name: str) -> dict:
-    path = f"./config/{name}.toml"
-    if not os.path.exists(path):
-        with open(path, "w") as f:
-            pass
-    return pytomlpp.load(path)
+    with open(f"./config/{name}.json", "r+") as f:
+        return json.load(f)
 
