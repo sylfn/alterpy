@@ -1,8 +1,3 @@
-import unicodedata
-import utils.common
-import urllib.parse
-
-
 def equal_capitalize(word: str, pattern: str) -> str:
     def pat(idx: int) -> bool:
         if idx >= len(pattern):

@@ -4,7 +4,6 @@ import utils.regex
 
 import typing
 import re
-import inspect
 
 
 class CommandHandler(typing.NamedTuple):

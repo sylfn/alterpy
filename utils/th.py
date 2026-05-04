@@ -1,4 +1,3 @@
-import asyncio
 import telethon.tl.custom.message
 import typing
 import utils.log
