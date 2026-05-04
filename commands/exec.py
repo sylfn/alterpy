@@ -1,10 +1,10 @@
-import utils.cm
+import utils.command
 import utils.regex
 import typing
 import traceback  # TODO fix!
 
 
-async def on_exec(cm: utils.cm.CommandMessage) -> None:
+async def on_exec(cm: utils.command.Message) -> None:
     shifted_arg = cm.arg.strip().strip('`').replace('\n', '\n    ')
     code = '\n'.join([
         f"async def func():",
@@ -21,7 +21,7 @@ async def on_exec(cm: utils.cm.CommandMessage) -> None:
         await cm.int_cur.reply(f"While executing following code:\n```{lined_code}```")
 
 
-handler_list = [utils.cm.CommandHandler(
+handler_list = [utils.command.Handler(
     name="exec",
     pattern=utils.regex.cmd("exec"),
     help_page='elevated',

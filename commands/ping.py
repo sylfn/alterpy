@@ -1,6 +1,6 @@
 import datetime
 import typing
-import utils.cm
+import utils.command
 import utils.common
 import utils.lang.ru
 import utils.locale
@@ -11,7 +11,7 @@ import utils.user
 import zoneinfo
 
 
-handler_list: list[utils.cm.CommandHandler] = []
+handler_list: list[utils.command.Handler] = []
 
 start_time = datetime.datetime.now(datetime.timezone.utc)
 
@@ -60,7 +60,7 @@ ID чата — `{cm.sender.chat.id}`
 LOC = utils.locale.Localizator(translations)
 
 
-def get_ping_times(cm: utils.cm.CommandMessage) -> tuple[str, str, str]:
+def get_ping_times(cm: utils.command.Message) -> tuple[str, str, str]:
     """return ping, handle and up formatted times"""
     cur_time = datetime.datetime.now(datetime.timezone.utc)
 
@@ -74,21 +74,21 @@ def get_ping_times(cm: utils.cm.CommandMessage) -> tuple[str, str, str]:
     return ping_s, handle_s, up_s
 
 
-async def on_ping(cm: utils.cm.CommandMessage) -> None:
+async def on_ping(cm: utils.command.Message) -> None:
     ping, handle, up = get_ping_times(cm)
     rep = eval(LOC.get('ping_reply', cm.lang))
     msg = eval(LOC.get('ping_message', cm.lang))
     await cm.int_cur.reply(msg)
 
 
-async def on_test(cm: utils.cm.CommandMessage) -> None:
+async def on_test(cm: utils.command.Message) -> None:
     ping, handle, up = get_ping_times(cm)
     rep = eval(LOC.get('test_reply', cm.lang))
     msg = eval(LOC.get('ping_message', cm.lang))
     await cm.int_cur.reply(msg)
 
 
-async def on_stat(cm: utils.cm.CommandMessage) -> None:
+async def on_stat(cm: utils.command.Message) -> None:
     cur_time = datetime.datetime.now(datetime.timezone.utc)
     ping, handle, up = get_ping_times(cm)
     system_info = utils.system.system_info()
@@ -98,18 +98,18 @@ async def on_stat(cm: utils.cm.CommandMessage) -> None:
     await cm.int_cur.reply(msg)
 
 
-def replier(ans: str) -> typing.Callable[[utils.cm.CommandMessage], typing.Awaitable[None]]:
-    async def on_reply(cm: utils.cm.CommandMessage) -> None:
+def replier(ans: str) -> typing.Callable[[utils.command.Message], typing.Awaitable[None]]:
+    async def on_reply(cm: utils.command.Message) -> None:
         await cm.int_cur.reply(ans)
     return on_reply
 
 
-handler_list.append(utils.cm.CommandHandler(name="ping", pattern=utils.regex.cmd("(ping|пинг)$"), help_page="ping", handler_impl=on_ping))
-handler_list.append(utils.cm.CommandHandler(name="test", pattern=utils.regex.cmd("(test|тест)$"), help_page="test", handler_impl=on_test))
-handler_list.append(utils.cm.CommandHandler(name="stat", pattern=utils.regex.cmd("(stat|стат|инфо)$"), help_page="ping", handler_impl=on_stat))
+handler_list.append(utils.command.Handler(name="ping", pattern=utils.regex.cmd("(ping|пинг)$"), help_page="ping", handler_impl=on_ping))
+handler_list.append(utils.command.Handler(name="test", pattern=utils.regex.cmd("(test|тест)$"), help_page="test", handler_impl=on_test))
+handler_list.append(utils.command.Handler(name="stat", pattern=utils.regex.cmd("(stat|стат|инфо)$"), help_page="ping", handler_impl=on_stat))
 
 handler_list.extend(
-    utils.cm.CommandHandler(
+    utils.command.Handler(
         name=msg,
         pattern=utils.regex.ignore_case(utils.regex.pat_starts_with(pat)),
         help_page="ping",

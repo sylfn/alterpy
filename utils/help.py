@@ -1,5 +1,5 @@
 import utils.file
-import utils.cm
+import utils.command
 import utils.regex
 import utils.str
 import typing
@@ -16,8 +16,8 @@ def link(name: str) -> str:
     return f'[{utils.str.escape(name or "Справка")}]({entry(name)})'
 
 
-def forward_handler() -> typing.Callable[[utils.cm.CommandMessage], typing.Awaitable[None]]:
-    async def on_help(cm: utils.cm.CommandMessage) -> None:
+def forward_handler() -> typing.Callable[[utils.command.Message], typing.Awaitable[None]]:
+    async def on_help(cm: utils.command.Message) -> None:
         await cm.int_cur.reply(link(cm.arg))
     return on_help
 
@@ -41,15 +41,15 @@ def on_reverse_help_impl(handlers: list[typing.Any], arg: str, help_cmds: list[s
     return "Найденные разделы: " + '; '.join(map(link, help_pages_list))
 
 
-def reverse_handler(handlers: list[typing.Any], help_cmds: list[str]) -> typing.Callable[[utils.cm.CommandMessage], typing.Awaitable[None]]:
-    async def on_help(cm: utils.cm.CommandMessage) -> None:
+def reverse_handler(handlers: list[typing.Any], help_cmds: list[str]) -> typing.Callable[[utils.command.Message], typing.Awaitable[None]]:
+    async def on_help(cm: utils.command.Message) -> None:
         await cm.int_cur.reply(on_reverse_help_impl(handlers, cm.arg, help_cmds))
     return on_help
 
 
 def add(handlers: list[typing.Any], man_cmds: list[str] = ["man"], help_cmds: list[str] = ["help"]) -> None:
     handlers.extend([
-        utils.cm.CommandHandler(
+        utils.command.Handler(
             name=name,
             pattern=utils.regex.pre(utils.regex.union(commands)),
             help_page='help',

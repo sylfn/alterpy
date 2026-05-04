@@ -1,15 +1,15 @@
-import utils.cm
+import utils.command
 import utils.regex
 
 
-async def on_start(cm: utils.cm.CommandMessage) -> None:
+async def on_start(cm: utils.command.Message) -> None:
     await cm.int_cur.reply(
         "Привет! На связи alterpy - полузаброшенный, но всё так же быстрый, потому что никому не нужный телеграм-бот!\n" +
         "\n" +
         "[Список команд](https://sylfn.github.io/alterpy/help). [Исходный код](https://github.com/sylfn/alterpy). Пинг до бота: `/ping`\n"
     )
 
-handler_list = [utils.cm.CommandHandler(
+handler_list = [utils.command.Handler(
     name="start",
     pattern=utils.regex.raw("/start(@alterpy_bot)?"),
     help_page="start",

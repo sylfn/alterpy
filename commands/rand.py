@@ -1,4 +1,4 @@
-import utils.cm
+import utils.command
 import utils.regex
 import utils.locale
 
@@ -45,27 +45,27 @@ translations = {
 LOC = utils.locale.Localizator(translations)
 
 
-async def on_prob(cm: utils.cm.CommandMessage) -> None:
+async def on_prob(cm: utils.command.Message) -> None:
     pref = random.choice(LOC.obj('prefs', cm.lang))
     val = random.randint(0, 100)
     await cm.int_cur.reply(f"{pref} {val}%")
 
 
-async def on_choose(cm: utils.cm.CommandMessage) -> None:
+async def on_choose(cm: utils.command.Message) -> None:
     opts = re.split('(?i)(^|\\s)(or|или)($|\\s)', cm.arg)[::4]
     pref = random.choice(LOC.obj('prefs', cm.lang))
     val = random.choice(opts).strip()
     await cm.int_cur.reply(f"{pref} {val}")
 
 
-handler_list.append(utils.cm.CommandHandler(
+handler_list.append(utils.command.Handler(
     name='prob',
     pattern=utils.regex.cmd(utils.regex.unite('prob', 'chance', 'инфа', 'шанс', 'вер', 'вероятность')),
     help_page="random",
     handler_impl=on_prob
 ))
 
-handler_list.append(utils.cm.CommandHandler(
+handler_list.append(utils.command.Handler(
     name='choose',
     pattern=utils.regex.cmd(utils.regex.unite('choose', 'select', 'выбери')),
     help_page="random",

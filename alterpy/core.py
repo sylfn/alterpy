@@ -1,4 +1,4 @@
-import utils.cm
+import utils.command
 import utils.config
 import utils.help
 import utils.log
@@ -45,16 +45,16 @@ async def main(log: logging.Logger) -> None:
                 context.the_bot_id = int(telethon_config['bot_token'].split(':')[0])
                 del telethon_config
 
-                utils.help.add(utils.cm.handlers, ['man', 'ман'], ['help', 'command', 'справка', 'команда'])
-                utils.cm.initial = utils.cm.handlers[:]
+                utils.help.add(utils.command.handlers, ['man', 'ман'], ['help', 'command', 'справка', 'команда'])
+                utils.command.initial = utils.command.handlers[:]
 
-                res = await utils.mod.load_handlers(utils.cm.initial, utils.cm.handlers, utils.cm.location, True)
+                res = await utils.mod.load_handlers(utils.command.initial, utils.command.handlers, utils.command.location, True)
                 try:
                     await client.send_message(_chat, f"← alterpy start: {res}. Check logs for further info", reply_to=_reply)
                 except:
                     log.warning("Could not reply back 'started'")
 
-                client.add_event_handler(utils.cm.event_handler, telethon.events.newmessage.NewMessage)
+                client.add_event_handler(utils.command.event_handler, telethon.events.newmessage.NewMessage)
 
                 log.info("Started!")
                 await client.run_until_disconnected()

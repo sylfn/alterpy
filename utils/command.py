@@ -11,7 +11,7 @@ import telethon.tl.custom
 import telethon.tl.types
 import telethon.client
 
-class CommandMessage(typing.NamedTuple):
+class Message(typing.NamedTuple):
     arg: str  # message text
     rep: str  # message text with reply attached
     time: datetime.datetime  # UTC time when sent
@@ -26,16 +26,16 @@ class CommandMessage(typing.NamedTuple):
     msg: telethon.tl.custom.message.Message
     lang: str
 
-class CommandHandler(typing.NamedTuple):
+class Handler(typing.NamedTuple):
     name: str  # command name
     pattern: re.Pattern[str]  # regex pattern
     help_page: str
-    handler_impl: typing.Callable[[CommandMessage], typing.Awaitable[None]]
+    handler_impl: typing.Callable[[Message], typing.Awaitable[None]]
     is_prefix: bool = False  # should a command be deleted from its message when passed to handler
     is_elevated: bool = False  # should a command be invoked only if user is admin
     is_arg_current: bool = False  # don't take arg from reply if set
 
-    async def invoke(self, cm: CommandMessage) -> None:
+    async def invoke(self, cm: Message) -> None:
         if not self.is_elevated or cm.sender.is_admin():
             try:
                 await self.handler_impl(cm)
@@ -45,17 +45,17 @@ class CommandHandler(typing.NamedTuple):
         else:
             await cm.int_cur.reply("Only bot admins can run elevated commands")
 
-handlers: list[CommandHandler] = []
-initial: list[CommandHandler] = []
+handlers: list[Handler] = []
+initial: list[Handler] = []
 location = "commands"
 
-def apply(cm: CommandMessage, ch: CommandHandler) -> CommandMessage:
+def apply(cm: Message, ch: Handler) -> Message:
     arg = re.sub(ch.pattern, '', cm.arg)
     if not len(arg) and not ch.is_arg_current:
         arg = cm.rep
     return cm._replace(arg=arg)
 
-async def from_message(msg_cur: telethon.tl.custom.message.Message) -> CommandMessage:
+async def from_message(msg_cur: telethon.tl.custom.message.Message) -> Message:
     msg_prev = await msg_cur.get_reply_message()
     has_reply = msg_prev is not None
     chat_obj = await msg_cur.get_chat()
@@ -94,12 +94,12 @@ async def from_message(msg_cur: telethon.tl.custom.message.Message) -> CommandMe
 
     local_time = datetime.datetime.now(datetime.timezone.utc)
 
-    return CommandMessage(arg or '', rep or '', time, local_time, sender, reply_sender, int_cur, int_prev, client, id, reply_id, msg_cur, lang)
+    return Message(arg or '', rep or '', time, local_time, sender, reply_sender, int_cur, int_prev, client, id, reply_id, msg_cur, lang)
 
-async def from_event(event: telethon.events.NewMessage) -> CommandMessage:
+async def from_event(event: telethon.events.NewMessage) -> Message:
     return await from_message(event.message)
 
-async def process_command_message(cm: CommandMessage) -> None:
+async def process_command_message(cm: Message) -> None:
     await asyncio.gather(*[
         handler.invoke(apply(cm, handler) if handler.is_prefix else cm)
         for handler in handlers

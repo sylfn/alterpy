@@ -1,7 +1,7 @@
 import dataclasses
 import re
 import typing
-import utils.cm
+import utils.command
 import utils.common
 import utils.locale
 import utils.log
@@ -83,7 +83,7 @@ rp2handlers = [
 rp2handlers_regex = utils.regex.cmd(utils.regex.union(h.pattern for h in rp2handlers))
 
 
-async def on_rp(cm: utils.cm.CommandMessage) -> None:
+async def on_rp(cm: utils.command.Message) -> None:
     user = await cm.sender.get_mention()
     pronoun_set = cm.sender.get_pronouns()
     default_mention = [(cm.reply_sender, await cm.reply_sender.get_mention())] if cm.reply_sender is not None else []
@@ -129,7 +129,7 @@ async def on_rp(cm: utils.cm.CommandMessage) -> None:
         await cm.int_cur.reply('\n'.join(res), link_preview=False)
 
 
-async def on_role(cm: utils.cm.CommandMessage) -> None:
+async def on_role(cm: utils.command.Message) -> None:
     self_mention = [(cm.sender, await cm.sender.get_mention())]
     pronoun_set = cm.sender.get_pronouns()
     default_mention = [(cm.reply_sender, await cm.reply_sender.get_mention())] if cm.reply_sender is not None else []
@@ -170,7 +170,7 @@ async def on_role(cm: utils.cm.CommandMessage) -> None:
 
 
 handler_list = [
-    utils.cm.CommandHandler("role", rp2handlers_regex, "rp2", on_rp),
-    utils.cm.CommandHandler("role-new", utils.regex.ignore_case("(^|\n)~.*(?<!~)($|\n)"), "rp3", on_role),
+    utils.command.Handler("role", rp2handlers_regex, "rp2", on_rp),
+    utils.command.Handler("role-new", utils.regex.ignore_case("(^|\n)~.*(?<!~)($|\n)"), "rp3", on_role),
 ]
 

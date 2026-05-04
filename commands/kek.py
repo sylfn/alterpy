@@ -1,10 +1,10 @@
-import utils.cm
+import utils.command
 import utils.rand
 import utils.regex
 import random
 
 
-async def on_da(cm: utils.cm.CommandMessage) -> None:
+async def on_da(cm: utils.command.Message) -> None:
     if random.randint(1, 4) == 1:
         await cm.int_cur.reply(
             utils.rand.weighted([
@@ -15,7 +15,7 @@ async def on_da(cm: utils.cm.CommandMessage) -> None:
         )
 
 
-async def on_net(cm: utils.cm.CommandMessage) -> None:
+async def on_net(cm: utils.command.Message) -> None:
     if random.randint(1, 4) == 1:
         await cm.int_cur.reply(
             utils.rand.weighted([
@@ -25,17 +25,17 @@ async def on_net(cm: utils.cm.CommandMessage) -> None:
         )
 
 
-async def on_dura(cm: utils.cm.CommandMessage) -> None:
+async def on_dura(cm: utils.command.Message) -> None:
     if random.randint(1, 4) == 1:
         await cm.int_cur.reply('а может ты 🤨?')
 
 
-async def on_spok(cm: utils.cm.CommandMessage) -> None:
+async def on_spok(cm: utils.command.Message) -> None:
     await cm.int_cur.reply('Cладких снов 🥺')
 
 
 handler_list = [
-    utils.cm.CommandHandler(name=name, pattern=utils.regex.raw(pat), help_page="kek", handler_impl=handler)
+    utils.command.Handler(name=name, pattern=utils.regex.raw(pat), help_page="kek", handler_impl=handler)
     for name, pat, handler in [
         ("да", "\\bда$", on_da),
         ("нет", "\\bнет$", on_net),
