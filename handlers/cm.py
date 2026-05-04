@@ -28,18 +28,12 @@ async def init() -> None:
 
 
 async def process_command_message(cm: utils.cm.CommandMessage) -> None:
-    media_type = cm.media.type()
     await asyncio.gather(*[
         handler.invoke(
             utils.ch.apply(cm, handler) if handler.is_prefix else cm
         )
-        for handler in filter(
-            lambda handler:
-            bool(re.search(handler.pattern, cm.arg))
-                and (media_type in handler.required_media_type
-                     or not handler.required_media_type),
-            ch_list
-        )
+        for handler in ch_list
+        if re.search(handler.pattern, cm.arg)
     ])
 
 

@@ -16,7 +16,6 @@ class CommandHandler(typing.NamedTuple):
     is_prefix: bool = False  # should a command be deleted from its message when passed to handler
     is_elevated: bool = False  # should a command be invoked only if user is admin
     is_arg_current: bool = False  # don't take arg from reply if set
-    required_media_type: typing.Set[str] = set()
 
     async def invoke(self, cm: utils.cm.CommandMessage) -> None:
         if not self.is_elevated or cm.sender.is_admin():
