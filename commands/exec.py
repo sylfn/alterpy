@@ -1,4 +1,3 @@
-import utils.ch
 import utils.cm
 import utils.regex
 import typing
@@ -22,7 +21,7 @@ async def on_exec(cm: utils.cm.CommandMessage) -> None:
         await cm.int_cur.reply(f"While executing following code:\n```{lined_code}```")
 
 
-handler_list = [utils.ch.CommandHandler(
+handler_list = [utils.cm.CommandHandler(
     name="exec",
     pattern=utils.regex.cmd("exec"),
     help_page='elevated',

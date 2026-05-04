@@ -1,6 +1,5 @@
 import utils.file
 import utils.cm
-import utils.ch
 import utils.regex
 import utils.str
 import typing
@@ -50,7 +49,7 @@ def reverse_handler(handlers: list[typing.Any], help_cmds: list[str]) -> typing.
 
 def add(handlers: list[typing.Any], man_cmds: list[str] = ["man"], help_cmds: list[str] = ["help"]) -> None:
     handlers.extend([
-        utils.ch.CommandHandler(
+        utils.cm.CommandHandler(
             name=name,
             pattern=utils.regex.pre(utils.regex.union(commands)),
             help_page='help',

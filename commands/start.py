@@ -1,4 +1,3 @@
-import utils.ch
 import utils.cm
 import utils.regex
 
@@ -10,7 +9,7 @@ async def on_start(cm: utils.cm.CommandMessage) -> None:
         "[Список команд](https://sylfn.github.io/alterpy/help). [Исходный код](https://github.com/sylfn/alterpy). Пинг до бота: `/ping`\n"
     )
 
-handler_list = [utils.ch.CommandHandler(
+handler_list = [utils.cm.CommandHandler(
     name="start",
     pattern=utils.regex.raw("/start(@alterpy_bot)?"),
     help_page="start",

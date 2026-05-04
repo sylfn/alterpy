@@ -1,31 +1,17 @@
-import utils.log
+import utils.cm
 import utils.config
+import utils.help
+import utils.log
 import utils.mod
-import utils.file
 import sqlite3
 import aiohttp
-import asyncio
 import telethon.events.newmessage
 import telethon.tl.custom.message
 import logging
-import typing
+import re
 import os
 
 from . import context
-
-
-async def process_message(msg: telethon.tl.custom.message.Message) -> None:
-    tasks = [
-        asyncio.create_task(handler.invoke(msg))
-        for handler in context.message_handlers
-    ]
-    if tasks:
-        await asyncio.wait(tasks)
-
-
-async def event_handler(event: telethon.events.newmessage.NewMessage) -> None:
-    await process_message(event.message)
-
 
 async def main(log: logging.Logger) -> None:
     log.info("AlterPy")
@@ -59,13 +45,16 @@ async def main(log: logging.Logger) -> None:
                 context.the_bot_id = int(telethon_config['bot_token'].split(':')[0])
                 del telethon_config
 
-                res = await utils.mod.load_handlers([], context.message_handlers, "handlers", True)
+                utils.help.add(utils.cm.handlers, ['man', 'ман'], ['help', 'command', 'справка', 'команда'])
+                utils.cm.initial = utils.cm.handlers[:]
+
+                res = await utils.mod.load_handlers(utils.cm.initial, utils.cm.handlers, utils.cm.location, True)
                 try:
                     await client.send_message(_chat, f"← alterpy start: {res}. Check logs for further info", reply_to=_reply)
                 except:
                     log.warning("Could not reply back 'started'")
 
-                client.add_event_handler(event_handler, telethon.events.newmessage.NewMessage)
+                client.add_event_handler(utils.cm.event_handler, telethon.events.newmessage.NewMessage)
 
                 log.info("Started!")
                 await client.run_until_disconnected()

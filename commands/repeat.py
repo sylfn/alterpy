@@ -1,7 +1,5 @@
 import utils.cm
 import utils.regex
-import utils.ch
-import handlers.cm
 
 
 async def on_repeat(cm: utils.cm.CommandMessage) -> None:
@@ -9,10 +7,10 @@ async def on_repeat(cm: utils.cm.CommandMessage) -> None:
         msg_prev = cm.int_prev.message
         cm_new = await utils.cm.from_message(msg_prev)
         cm_new = cm_new._replace(sender=cm.sender)._replace(time=cm.time)._replace(local_time=cm.local_time)  # <- for rights, and other
-        await handlers.cm.process_command_message(cm_new)
+        await utils.cm.process_command_message(cm_new)
 
 
-handler_list = [utils.ch.CommandHandler(
+handler_list = [utils.cm.CommandHandler(
     name="repeat",
     pattern=utils.regex.cmd(utils.regex.unite("повтор", "заново", "repeat")),
     help_page="repeat",

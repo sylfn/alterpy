@@ -1,6 +1,5 @@
 import datetime
 import typing
-import utils.ch
 import utils.cm
 import utils.common
 import utils.lang.ru
@@ -12,7 +11,7 @@ import utils.user
 import zoneinfo
 
 
-handler_list: list[utils.ch.CommandHandler] = []
+handler_list: list[utils.cm.CommandHandler] = []
 
 start_time = datetime.datetime.now(datetime.timezone.utc)
 
@@ -105,12 +104,12 @@ def replier(ans: str) -> typing.Callable[[utils.cm.CommandMessage], typing.Await
     return on_reply
 
 
-handler_list.append(utils.ch.CommandHandler(name="ping", pattern=utils.regex.cmd("(ping|пинг)$"), help_page="ping", handler_impl=on_ping))
-handler_list.append(utils.ch.CommandHandler(name="test", pattern=utils.regex.cmd("(test|тест)$"), help_page="test", handler_impl=on_test))
-handler_list.append(utils.ch.CommandHandler(name="stat", pattern=utils.regex.cmd("(stat|стат|инфо)$"), help_page="ping", handler_impl=on_stat)) 
+handler_list.append(utils.cm.CommandHandler(name="ping", pattern=utils.regex.cmd("(ping|пинг)$"), help_page="ping", handler_impl=on_ping))
+handler_list.append(utils.cm.CommandHandler(name="test", pattern=utils.regex.cmd("(test|тест)$"), help_page="test", handler_impl=on_test))
+handler_list.append(utils.cm.CommandHandler(name="stat", pattern=utils.regex.cmd("(stat|стат|инфо)$"), help_page="ping", handler_impl=on_stat))
 
 handler_list.extend(
-    utils.ch.CommandHandler(
+    utils.cm.CommandHandler(
         name=msg,
         pattern=utils.regex.ignore_case(utils.regex.pat_starts_with(pat)),
         help_page="ping",

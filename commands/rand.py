@@ -1,5 +1,4 @@
 import utils.cm
-import utils.ch
 import utils.regex
 import utils.locale
 
@@ -59,14 +58,14 @@ async def on_choose(cm: utils.cm.CommandMessage) -> None:
     await cm.int_cur.reply(f"{pref} {val}")
 
 
-handler_list.append(utils.ch.CommandHandler(
+handler_list.append(utils.cm.CommandHandler(
     name='prob',
     pattern=utils.regex.cmd(utils.regex.unite('prob', 'chance', 'инфа', 'шанс', 'вер', 'вероятность')),
     help_page="random",
     handler_impl=on_prob
 ))
 
-handler_list.append(utils.ch.CommandHandler(
+handler_list.append(utils.cm.CommandHandler(
     name='choose',
     pattern=utils.regex.cmd(utils.regex.unite('choose', 'select', 'выбери')),
     help_page="random",

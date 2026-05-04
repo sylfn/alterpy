@@ -1,4 +1,3 @@
-import utils.ch
 import utils.cm
 import utils.rand
 import utils.regex
@@ -36,7 +35,7 @@ async def on_spok(cm: utils.cm.CommandMessage) -> None:
 
 
 handler_list = [
-    utils.ch.CommandHandler(name=name, pattern=utils.regex.raw(pat), help_page="kek", handler_impl=handler)
+    utils.cm.CommandHandler(name=name, pattern=utils.regex.raw(pat), help_page="kek", handler_impl=handler)
     for name, pat, handler in [
         ("да", "\\bда$", on_da),
         ("нет", "\\bнет$", on_net),

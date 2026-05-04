@@ -1,12 +1,15 @@
+import utils.log
 import utils.user
 import utils.interactor
+import alterpy.context
 
-import typing
+import asyncio
 import datetime
+import re
+import typing
 import telethon.tl.custom
 import telethon.tl.types
 import telethon.client
-
 
 class CommandMessage(typing.NamedTuple):
     arg: str  # message text
@@ -23,6 +26,34 @@ class CommandMessage(typing.NamedTuple):
     msg: telethon.tl.custom.message.Message
     lang: str
 
+class CommandHandler(typing.NamedTuple):
+    name: str  # command name
+    pattern: re.Pattern[str]  # regex pattern
+    help_page: str
+    handler_impl: typing.Callable[[CommandMessage], typing.Awaitable[None]]
+    is_prefix: bool = False  # should a command be deleted from its message when passed to handler
+    is_elevated: bool = False  # should a command be invoked only if user is admin
+    is_arg_current: bool = False  # don't take arg from reply if set
+
+    async def invoke(self, cm: CommandMessage) -> None:
+        if not self.is_elevated or cm.sender.is_admin():
+            try:
+                await self.handler_impl(cm)
+            except Exception as e:
+                await cm.int_cur.reply(f"Exception: {e}")
+                utils.log.get("handler").exception("invoke exception")
+        else:
+            await cm.int_cur.reply("Only bot admins can run elevated commands")
+
+handlers: list[CommandHandler] = []
+initial: list[CommandHandler] = []
+location = "commands"
+
+def apply(cm: CommandMessage, ch: CommandHandler) -> CommandMessage:
+    arg = re.sub(ch.pattern, '', cm.arg)
+    if not len(arg) and not ch.is_arg_current:
+        arg = cm.rep
+    return cm._replace(arg=arg)
 
 async def from_message(msg_cur: telethon.tl.custom.message.Message) -> CommandMessage:
     msg_prev = await msg_cur.get_reply_message()
@@ -65,6 +96,24 @@ async def from_message(msg_cur: telethon.tl.custom.message.Message) -> CommandMe
 
     return CommandMessage(arg or '', rep or '', time, local_time, sender, reply_sender, int_cur, int_prev, client, id, reply_id, msg_cur, lang)
 
-
 async def from_event(event: telethon.events.NewMessage) -> CommandMessage:
     return await from_message(event.message)
+
+async def process_command_message(cm: CommandMessage) -> None:
+    await asyncio.gather(*[
+        handler.invoke(apply(cm, handler) if handler.is_prefix else cm)
+        for handler in handlers
+        if re.search(handler.pattern, cm.arg)
+    ])
+
+async def on_command_message(msg: telethon.tl.custom.message.Message) -> None:
+    if msg.sender_id == alterpy.context.the_bot_id:  # Ignore messages from self
+        return
+    if msg.fwd_from is not None:  # Ignore forwarded messages
+        return
+
+    cm = await from_message(msg)
+    await process_command_message(cm)
+
+async def event_handler(event: telethon.events.newmessage.NewMessage) -> None:
+    await on_command_message(event.message)

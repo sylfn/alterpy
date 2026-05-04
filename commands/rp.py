@@ -1,7 +1,6 @@
 import dataclasses
 import re
 import typing
-import utils.ch
 import utils.cm
 import utils.common
 import utils.locale
@@ -171,7 +170,7 @@ async def on_role(cm: utils.cm.CommandMessage) -> None:
 
 
 handler_list = [
-    utils.ch.CommandHandler("role", rp2handlers_regex, "rp2", on_rp),
-    utils.ch.CommandHandler("role-new", utils.regex.ignore_case("(^|\n)~.*(?<!~)($|\n)"), "rp3", on_role),
+    utils.cm.CommandHandler("role", rp2handlers_regex, "rp2", on_rp),
+    utils.cm.CommandHandler("role-new", utils.regex.ignore_case("(^|\n)~.*(?<!~)($|\n)"), "rp3", on_role),
 ]
 

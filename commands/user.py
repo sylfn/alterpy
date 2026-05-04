@@ -1,5 +1,4 @@
 import utils.cm
-import utils.ch
 import utils.pronouns
 import utils.regex
 import utils.str
@@ -147,8 +146,8 @@ for add, sub, get, cmd, hlp, cmds in [
 ]:
     rcmds = utils.regex.union(cmds)
     handler_list.extend([
-        utils.ch.CommandHandler(f'+{cmd}', utils.regex.add(rcmds), hlp, add, is_prefix=True, is_arg_current=True),
-        utils.ch.CommandHandler(f'-{cmd}', utils.regex.sub(rcmds), hlp, sub),
-        utils.ch.CommandHandler(f'?{cmd}', utils.regex.ask(rcmds), hlp, get),
+        utils.cm.CommandHandler(f'+{cmd}', utils.regex.add(rcmds), hlp, add, is_prefix=True, is_arg_current=True),
+        utils.cm.CommandHandler(f'-{cmd}', utils.regex.sub(rcmds), hlp, sub),
+        utils.cm.CommandHandler(f'?{cmd}', utils.regex.ask(rcmds), hlp, get),
     ])
 
