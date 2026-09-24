@@ -1,4 +1,5 @@
-Telethon_v1.24
+telethon~=1.45
+folds~=0.3
 cryptg
 pymorphy3
 pymorphy3-dicts-ru
