@@ -140,7 +140,8 @@ async def on_role(cm: utils.command.Message) -> None:
         if not line or len(line) < 2 or line[0] != '~' or line[-1] == '~' or line[1].isdigit():
             continue
 
-        line = f"MENTION0 {line[1:]}"
+        line = line[1:].strip()
+        line = f"MENTION0 {line}"
         mentions = self_mention[:]
 
         pre, user, mention, post = await utils.user.from_str(line, chat, client)
