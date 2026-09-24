@@ -9,4 +9,5 @@ __pycache__
 *.db-*
 *.session
 *.session-journal
-
+.idea/
+*.iml
