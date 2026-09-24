@@ -1,4 +1,5 @@
-Telethon_v1.24
+telethon
+folds @ git+https://github.com/tm-a-t/folds@c7998dc27f6bdd07b9a26d014da6c98205738a10
 cryptg
 pymorphy3
 pymorphy3-dicts-ru
