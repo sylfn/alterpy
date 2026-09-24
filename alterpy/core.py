@@ -1,3 +1,5 @@
+import folds.markup
+
 import utils.command
 import utils.config
 import utils.help
@@ -32,6 +34,7 @@ async def main(log: logging.Logger) -> None:
     async with aiohttp.ClientSession() as context.session:
         telethon_config = utils.config.load("telethon")
         client = telethon.TelegramClient("alterpy", telethon_config['api_id'], telethon_config['api_hash'])
+        client.parse_mode = folds.markup.markdown
         await client.start(bot_token=telethon_config['bot_token'])
         async with client:
             log.info("Started telethon instance")
