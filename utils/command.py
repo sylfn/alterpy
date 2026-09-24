@@ -111,6 +111,10 @@ async def on_command_message(msg: telethon.tl.custom.message.Message) -> None:
         return
     if msg.fwd_from is not None:  # Ignore forwarded messages
         return
+    if msg.guestchat_via_from is not None:  # Ignore "guest mode" messages
+        return
+    if msg.via_bot_id is not None:
+        return
 
     cm = await from_message(msg)
     await process_command_message(cm)
