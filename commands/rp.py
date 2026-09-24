@@ -128,6 +128,7 @@ async def on_rp(cm: utils.command.Message) -> None:
     if res:
         await cm.int_cur.reply('\n'.join(res), link_preview=False)
 
+TELEGRAPH_RGX = re.compile(r'(https?://)?telegra\.ph')
 
 async def on_role(cm: utils.command.Message) -> None:
     self_mention = [(cm.sender, await cm.sender.get_mention())]
@@ -139,6 +140,9 @@ async def on_role(cm: utils.command.Message) -> None:
     for line in cm.arg.split('\n'):
         if not line or len(line) < 2 or line[0] != '~' or line[-1] == '~' or line[1].isdigit():
             continue
+        # Commonly used by spammers
+        if TELEGRAPH_RGX.search(line):
+            return
 
         line = line[1:].strip()
         line = f"MENTION0 {line}"
